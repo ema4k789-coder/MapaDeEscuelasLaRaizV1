@@ -1081,20 +1081,20 @@ actualizarFiltros();
     }
 
     const mapEl = document.getElementById('map');
-    if (mapEl){
-      function collapseOnMap(){
-        const w = window.innerWidth || 1024;
-        if (w <= 600){
-          if (panelContent && panelContent.style.display !== 'none' && !window.panelDocked) {
-            if (!panelCollapsed) { dragBtn.click(); }
-          }
-          const admin = document.getElementById('admin-panel');
-          if (admin && window.adminPanelOpen) {
-            window.adminPanelOpen = false;
-            admin.style.display = 'none';
-          }
+  if (mapEl){
+    function collapseOnMap(){
+      const w = window.innerWidth || 1024;
+      if (w <= 600){
+        if (panelContent && panelContent.style.display !== 'none' && !window.panelDocked) {
+          if (!panelCollapsed) { dragBtn.click(); }
+        }
+        const admin = document.getElementById('admin-panel');
+        if (admin && window.adminPanelOpen && !window.keepAdminVisible) {
+          window.adminPanelOpen = false;
+          admin.style.display = 'none';
         }
       }
+    }
       mapEl.addEventListener('click', collapseOnMap);
       mapEl.addEventListener('touchstart', collapseOnMap, { passive: true });
     }
@@ -1217,6 +1217,7 @@ updateBrandSizeByIcon();
 try{ map.invalidateSize(); }catch(e){}
 
 window.panelDocked = false;
+window.keepAdminVisible = false;
 function dockPanel(){
   const panel = document.getElementById('filterLevelPanel');
   const resizer = document.getElementById('panelResizer');
@@ -1334,7 +1335,7 @@ function applyAdminPanelMobile(){
       filtersBtn.style.display = 'none';
       if (levelsHeaderBtn) levelsHeaderBtn.style.display = '';
       if (typeof window.adminPanelOpen === 'undefined') window.adminPanelOpen = false;
-      admin.style.display = window.adminPanelOpen ? '' : 'none';
+      admin.style.display = (window.keepAdminVisible || window.adminPanelOpen) ? '' : 'none';
       admin.style.position = 'fixed';
       const th = topbar.offsetHeight || 28;
       admin.style.top = (th + 4) + 'px';
@@ -1357,8 +1358,8 @@ function applyAdminPanelMobile(){
       filtersBtn.style.display = 'none';
       if (levelsHeaderBtn) { levelsHeaderBtn.style.display = ''; }
       if (filtersHeaderBtn) { filtersHeaderBtn.style.display = ''; }
-      window.adminPanelOpen = false;
-      admin.style.display = 'none';
+      if (typeof window.adminPanelOpen === 'undefined') window.adminPanelOpen = false;
+      admin.style.display = (window.keepAdminVisible || window.adminPanelOpen) ? '' : 'none';
       admin.style.position = 'fixed';
       const th = topbar.offsetHeight || 48;
       admin.style.top = (th + 4) + 'px';
@@ -1400,10 +1401,12 @@ if (searchInputEl){
   searchInputEl.addEventListener('focus', function(){
     const admin = document.getElementById('admin-panel');
     const w = window.innerWidth || 1024;
-    if (w > 600) {
-      window.adminPanelOpen = true;
-      if (admin) admin.style.display = '';
-    }
+    window.adminPanelOpen = true;
+    window.keepAdminVisible = true;
+    if (admin) admin.style.display = '';
+  });
+  searchInputEl.addEventListener('blur', function(){
+    window.keepAdminVisible = false;
   });
 }
 
