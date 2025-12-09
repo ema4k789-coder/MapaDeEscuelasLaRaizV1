@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa de Escuelas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="stylesheet" href="leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    (function(){
+      var l = document.querySelector('link[href="style.css"]');
+      if (l) { l.href = 'style.css?v=' + Date.now(); }
+    })();
+  </script>
+  <script>
+  window.getFrameURL = (function(){
+    let cached = null;
+    let promise = null;
+    function process(src){
+      return new Promise(function(resolve, reject){
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function(){
+          const w = img.naturalWidth || img.width;
+          const h = img.naturalHeight || img.height;
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img,0,0);
+          const im = ctx.getImageData(0,0,w,h);
+          const d = im.data;
+          const thr = 22;
+          const mX = Math.round(0.09*w);
+          const mY = Math.round(0.11*h);
+          for (let y=0; y<h; y++){
+            for (let x=0; x<w; x++){
+              const idx = (y*w + x) * 4;
+              const r = d[idx], g = d[idx+1], b = d[idx+2];
+              const edge = Math.min(x, y, w-1-x, h-1-y);
+              if (edge < Math.max(mX, mY)){
+                const dark = (r+g+b)/3 < thr;
+                if (dark){
+                  const scale = Math.max(0, Math.min(1, edge / Math.max(mX, mY)));
+                  d[idx+3] = Math.round(d[idx+3] * scale);
+                }
+              }
+            }
+          }
+          ctx.putImageData(im,0,0);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = function(){ reject(new Error('frame error')); };
+        img.src = src;
+      });
+    }
+    return async function(){
+      if (cached) return cached;
+      if (!promise) promise = process('pizarron.png').catch(function(){ return null; });
+      cached = await promise;
+      return cached;
+    };
+  })();
+  </script>
+</head>
+<body>
+  <div id="topbar">
+    <h1>Mapa de Escuelas</h1>
+    <div id="brand-raiz">La Raíz</div>
+    <button id="filtersBtn">Filtros</button>
+    <div id="brandBadge" aria-label="La Raíz">La Raíz</div>
+    <button id="levelsHeaderBtn" class="icon-btn" title="Niveles">☰</button>
+    <button id="filtersHeaderBtn" class="icon-btn" title="Filtros">⛃</button>
+    <button id="editHeaderBtn" class="icon-btn" title="Editar">✎</button>
+    <div id="admin-panel">
+    <input type="text" id="searchInput" placeholder="Buscar por nombre, número, nivel o localidad" />
+  <div id="filterLevelPanel" class="panel-flotante" style="right:110px;top:16px;left:auto;position:fixed;z-index:1000;width:160px;min-width:140px;min-height:100px;">
+  <button id="togglePanelBtn" style="float:right;margin:2px 0 0 8px;">☰ Niveles</button>
+  <button id="dockPanelBtn" style="float:right;margin:2px 8px 0 8px;">Fijar arriba</button>
+  
+  <div id="panelContent" style="display:block;">
+    <input type="checkbox" class="levelCheck" value="Ciclo Medio" id="levelCicloMedio" checked>
+    <label for="levelCicloMedio">Ciclo Medio</label>
+    <input type="checkbox" class="levelCheck" value="Nivel Superior" id="levelNivelSuperior" checked>
+    <label for="levelNivelSuperior">Nivel Superior</label>
+    <input type="checkbox" class="levelCheck" value="Ciclo de Iniciación" id="levelCicloIniciacion" checked>
+    <label for="levelCicloIniciacion">Ciclo de Iniciación</label>
+    <input type="checkbox" class="levelCheck" value="Cursos y Talleres" id="levelCursosTalleres" checked>
+    <label for="levelCursosTalleres">Cursos y Talleres</label>
+    <input type="checkbox" id="levelAll" checked>
+    <label for="levelAll">Todos los niveles</label>
+  </div>
+  <div id="panelResizer" class="panel-resizer" aria-hidden="true"></div>
+</div>
+    <select id="filterDistrito">
+      <option value="">Todos los distritos</option>
+      <option value="La Plata">La Plata</option>
+      <option value="Berisso">Berisso</option>
+      <option value="Ensenada">Ensenada</option>
+    </select>
+    <select id="filterLocalidad" style="display:none;margin-top:6px;"></select>
+    <select id="filterSubLocalidad" style="display:none;margin-top:6px;"></select>
+    <span id="counter">0</span>
+    <button id="toggleBoundariesVisibilityBtn" class="icon-btn" style="margin-left:12px;" title="Ocultar límites">◫</button>
+    <button id="geojsonEditModeBtn" style="margin:0 0 0 12px;float:right;position:absolute;top:54px;right:16px;z-index:1002;">Modo edición GeoJSON</button>
+    </div>
+  </div>
+  <div id="map"></div>
+  <script src="leaflet.js?v=15"></script>
+  <script src="app.js?v=15"></script>
+</body>
+</html>

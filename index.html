@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=main.html">
+  <title>Splash Screen Design</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @font-face {
+      font-family: 'CooperBlackCustom';
+      src: url('./CooperBlackCustom.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'CalibriCustom';
+      src: url('./CalibriCustom.TTF') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    html, body {
+      color-scheme: only light;
+      user-select: none;
+    }
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: ui-sans-serif, system-ui, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+    .circle-bounce {
+      width: 300px;
+      height: 300px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 40px 8px #fff8, 0 8px 32px #0006;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      animation: bounce 1.6s infinite cubic-bezier(.5,0,.5,1);
+      position: relative;
+      animation-duration: 5s;
+      user-select: none;
+    }
+    @keyframes bounce {
+      0%   { transform: translateY(0); }
+      20%  { transform: translateY(-36px); }
+      40%  { transform: translateY(0); }
+      60%  { transform: translateY(-22px); }
+      80%  { transform: translateY(0); }
+      100% { transform: translateY(0); }
+    }
+    .la-raiz {
+      font-family: 'CooperBlackCustom', serif;
+      font-size: 3em;
+      color: #222;
+      text-align: center;
+      margin-bottom: 0px;
+      margin-top: 0px;
+      letter-spacing: 2px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      max-width: 260px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .agrupacion {
+      font-family: 'CalibriCustom', Arial, sans-serif;
+      font-size: 1.5em;
+      color: #222;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 8px;
+      margin-bottom: 0px;
+      letter-spacing: 1px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      max-width: 260px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+    .splash-title {
+      font-size: 2.2em;
+      color: #fff;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      margin-top: -8px;
+      text-align: center;
+      width: 300px;
+      max-width: 95vw;
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: nowrap;
+      overflow: visible;
+      user-select: none;
+    }
+    .splash-subtitle {
+      font-size: 1.3em;
+      color: #fff;
+      font-weight: normal;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+      text-align: center;
+      width: 300px;
+      max-width: 95vw;
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .splash-btn {
+      background: #fff;
+      color: #222;
+      font-size: 1.1em;
+      font-family: 'CalibriCustom', Arial, sans-serif;
+      font-weight: bold;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 32px;
+      margin-top: 18px;
+      box-shadow: 0 1px 1px 0 #fff0, 0 1px 1px #0001;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      text-align: center;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: visible;
+      animation: pulse 2.2s infinite;
+    }
+    .splash-btn:hover {
+      box-shadow: 0 6px 32px 0 #fff, 0 8px 32px #2228;
+      transform: scale(1.04);
+    }
+    .splash-btn-text {
+      text-shadow: 0 2px 8px #fff8, 0 2px 4px #0004;
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #222;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 1px 1px 0 #fff0, 0 1px 1px #0001; }
+      50% { box-shadow: 0 2px 2px 0 #fff0, 0 2px 2px #2222; transform: scale(1.03); }
+      100% { box-shadow: 0 1px 1px 0 #fff0, 0 1px 1px #0001; }
+    }
+    
+    @media (max-width: 600px) {
+  .circle-bounce {
+    width: 200px;
+    height: 200px;
+  }
+  .la-raiz, .agrupacion {
+    font-size: 2em;
+    max-width: none;
+    white-space: normal;
+  }
+  .agrupacion {
+    font-size: 1em;
+  }
+  .splash-title, .splash-subtitle {
+    width: 200px;
+    font-size: 1em;
+  }
+  .splash-btn {
+    font-size: 0.9em;
+    padding: 8px 20px 8px 24px;
+  }
+}
+    #easterEgg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(to bottom, #ff0033 0%, #c40030 100%);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 16px), #000 0);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 16px), #000 0);
+      filter: drop-shadow(0 0 14px rgba(0,0,0,0.35)) drop-shadow(0 0 10px rgba(255,0,0,0.25));
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="circle-bounce">
+    <div class="la-raiz">LA RAÍZ</div>
+    <div class="agrupacion">Agrupación docente</div>
+  </div>
+  <div class="splash-title">Mapa de escuelas</div>
+  <div class="splash-subtitle">La Plata, Berisso y Ensenada</div>
+  <button class="splash-btn" onclick="window.location.href='main.html'">
+    <span class="splash-btn-text">Realiza tu consulta</span>
+  </button>
+  <div id="easterEgg" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px;background:#fff;border-radius:50%;box-shadow:0 0 40px 8px #fff8, 0 8px 32px #0006;z-index:2000;align-items:center;justify-content:center;font-family:'CalibriCustom', Arial, sans-serif;color:#222;pointer-events:none;overflow:hidden;">
+    <div style="display:grid;place-items:center;box-sizing:border-box;width:92%;height:92%;padding:0 10px;text-align:center;font-weight:bold;font-size:1.7em;letter-spacing:0.6px;gap:10px;line-height:1.2;color:#d0002a;text-shadow:0 2px 10px rgba(0,0,0,0.25),0 1px 4px rgba(255,255,255,0.6);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <span>😊</span>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <span>Creado</span>
+          <span>por Emanuel Alvarez</span>
+        </div>
+        <span>🤪</span>
+      </div>
+    </div>
+  </div>
+  <script>
+  function isTouchDevice() {
+    return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+  }
+  function setBtnIcon() {
+    var iconDiv = document.getElementById('splashBtnIcon');
+    if (!iconDiv) return;
+    if (isTouchDevice()) {
+      iconDiv.innerHTML = ""; // No mostrar icono en móvil
+    } else {
+      iconDiv.innerHTML = `<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 28v-2c0-2.2 1.8-4 4-4h8c2.2 0 4 1.8 4 4v2\" stroke=\"#222\" stroke-width=\"2\"/><circle cx=\"16\" cy=\"12\" r=\"6\" fill=\"#222\"/><path d=\"M16 18v6\" stroke=\"#222\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>`;
+    }
+  }
+  setBtnIcon();
+  window.addEventListener('resize', setBtnIcon);
+  (function(){
+    var clickCount = 0;
+    var hideTimer = null;
+    var circle = document.querySelector('.circle-bounce');
+    var btn = document.querySelector('.splash-btn');
+    function isOutside(target){
+      return !(circle && circle.contains(target)) && !(btn && btn.contains(target));
+    }
+    function showEgg(){
+      var egg = document.getElementById('easterEgg');
+      if (!egg) return;
+      egg.style.display = 'flex';
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(function(){ egg.style.display = 'none'; }, 4000);
+    }
+    document.addEventListener('click', function(e){
+      if (isOutside(e.target)) {
+        clickCount++;
+        if (clickCount >= 7) { clickCount = 0; showEgg(); }
+      } else {
+        clickCount = 0;
+      }
+    }, true);
+  })();
+  </script>
+</body>
+</html>
