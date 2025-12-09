@@ -654,15 +654,21 @@ function actualizarPanelLocalidades() { actualizarFiltros(); }
 
 fetch('camposfiltrados.geojson')
   .then(async response => {
-    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const tryBackup = async () => {
+      try {
+        const res2 = await fetch('buckupgeojson/camposfiltrados.geojson', { cache: 'no-store' });
+        if (!res2.ok) return { features: [] };
+        const text2 = await res2.text();
+        try { return JSON.parse(text2); } catch(_) { return { features: [] }; }
+      } catch(_) { return { features: [] }; }
+    };
+    if (!response.ok) {
+      return await tryBackup();
+    }
     const text = await response.text();
     let data;
-    try { data = JSON.parse(text); }
-    catch(e) {
-      const res2 = await fetch('buckupgeojson/camposfiltrados.geojson', { cache: 'no-store' });
-      const text2 = await res2.text();
-      data = JSON.parse(text2);
-    }
+    try { data = JSON.parse(text); } catch(_) { data = await tryBackup(); }
+    if (!data || !data.features) data = { features: [] };
     return data;
   })
   .then(data => {
